@@ -30,11 +30,25 @@ func main() {
 				}
 			}
 
+		} else if len(os.Args)-1 == 2 && os.Args[1] == "cli" {
+
+			db, err := pkg.NewCLI(os.Args[2] + ".skl")
+			if err != nil {
+				fmt.Println(err)
+			} else {
+				db.Run()
+			}
+
 		} else if len(os.Args)-1 == 0 {
 			fmt.Printf(
 				`	SkikDB version: %v   A Database that supports JSON/key value ✔
 		SkikLang version %v
-
+How to create new DB ?
+	skikDB new database_name
+How to connect db from command line(CLI) ?
+	skikDB database_name
+How to initialize server ?
+	skikDB server database_name port
 `, pkg.VERSION, pkg.LANG_VERSION)
 		} else {
 			fmt.Println("Invalid arguments :/ 😒")

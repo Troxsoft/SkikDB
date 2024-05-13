@@ -30,6 +30,13 @@ func NewDB(filepath string) (*DB, error) {
 		Storage: storage,
 	}, nil
 }
+func (db *DB) Save() error {
+	err := os.WriteFile(db.Storage.Configd.Name+".skl", []byte(jsonToStr(db.Storage)), 0644)
+	if err != nil {
+		return err
+	}
+	return nil
+}
 func CreateDB(name string) (*DB, error) {
 	b, err := json.Marshal(DBStorage{
 		Datad: make(map[string]any),

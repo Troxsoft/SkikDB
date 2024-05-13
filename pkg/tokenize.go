@@ -145,6 +145,9 @@ func (skl *SkikLang) Tokenize() error {
 		} else if isValidSize(skl.SourceCode, index, 3) && skl.SourceCode[index] == 't' && skl.SourceCode[index+1] == 'r' && skl.SourceCode[index+2] == 'u' && skl.SourceCode[index+3] == 'e' {
 			skl.Tokens = append(skl.Tokens, *NewToken(BOOLEAN, true))
 			index += 3
+		} else if isValidSize(skl.SourceCode, index, 3) && skl.SourceCode[index] == 's' && skl.SourceCode[index+1] == 'a' && skl.SourceCode[index+2] == 'v' && skl.SourceCode[index+3] == 'e' {
+			skl.Tokens = append(skl.Tokens, *NewToken(SAVE, "save"))
+			index += 3
 		} else if isValidSize(skl.SourceCode, index, 5) && skl.SourceCode[index] == 'd' && skl.SourceCode[index+1] == 'e' && skl.SourceCode[index+2] == 'l' && skl.SourceCode[index+3] == 'e' && skl.SourceCode[index+4] == 't' && skl.SourceCode[index+5] == 'e' {
 			skl.Tokens = append(skl.Tokens, *NewToken(DELETE, "delete"))
 			index += 5

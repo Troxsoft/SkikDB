@@ -19,6 +19,7 @@ type SkikLang struct {
 
 func (skl *SkikLang) PreInit() {
 	skl.SourceCode = strings.ReplaceAll(skl.SourceCode, "\r\n", "\n")
+	skl.SourceCode = strings.TrimSpace(skl.SourceCode)
 	skl.SourceCode += "\n"
 
 }

@@ -12,7 +12,7 @@ const (
 	JSON           // {"json":true}
 	BOOLEAN        // true or false
 	LIST           // [2,3,4,5,6,7,8,"hola mundo",true]
-
+	SAVE
 )
 
 type Token struct {
