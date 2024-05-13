@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/Troxsoft/SkikDB/pkg"
 )
@@ -12,15 +13,31 @@ func main() {
 		fmt.Println("Expectative argument: 1 but found: nothing")
 	} else {
 		if len(os.Args)-1 == 2 && os.Args[1] == "new" {
-			_, err := pkg.CreateDB(os.Args[2])
-			if err != nil {
-				fmt.Printf("%v\n", err)
+			if strings.HasSuffix(os.Args[2], ".skl") {
+				f, _ := strings.CutSuffix(os.Args[2], ".skl")
+				_, err := pkg.CreateDB(f)
+				if err != nil {
+					fmt.Printf("%v\n", err)
+				} else {
+					fmt.Printf("DB:%s created sucessfull :)\n", f)
+				}
 			} else {
-				fmt.Printf("DB:%s created sucessfull :)\n", os.Args[2])
+				_, err := pkg.CreateDB(os.Args[2])
+				if err != nil {
+					fmt.Printf("%v\n", err)
+				} else {
+					fmt.Printf("DB:%s created sucessfull :)\n", os.Args[2])
+				}
 			}
 
+		} else if len(os.Args)-1 == 0 {
+			fmt.Printf(
+				`	SkikDB version: %v   A Database that supports JSON/key value ✔
+		SkikLang version %v
+
+`, pkg.VERSION, pkg.LANG_VERSION)
 		} else {
-			fmt.Println("Invalid arguments :/")
+			fmt.Println("Invalid arguments :/ 😒")
 		}
 	}
 	// lang := pkg.NewSkikLang(
