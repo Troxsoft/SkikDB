@@ -1,0 +1,21 @@
+get
+    get *
+    get "juan"
+    get {"all":true,startsWith:"user"}
+    get json props
+        startsWith
+        endsWith
+        len
+    get "juan" ["pepe"]
+set
+    set "juan" "aña"
+    set "json util" {
+        "isAña":true,
+        "deleted":false,
+        "pepe":{
+            "1":1
+        }
+    }
+delete
+    delete "juan"
+    delete "juan" ["deleted","pepe":["1"]]
