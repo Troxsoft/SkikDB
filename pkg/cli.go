@@ -28,12 +28,15 @@ func (cli *Cli) autocompleter(d prompt.Document) []prompt.Suggest {
 
 	if !strings.Contains(d.Text, " ") {
 		suggestions = []prompt.Suggest{
-			{Text: "get", Description: "get a key"},
-			{Text: "set", Description: "set a key"},
-			{Text: "delete", Description: "delete key"},
-			{Text: "save", Description: "save database on disk"},
-			{Text: "@close", Description: "close cli sesion"},
-			{Text: "exists", Description: "return true if key exists  else return false"},
+			{Text: "get", Description: "Get a key"},
+			{Text: "set", Description: "Set a key"},
+			{Text: "delete", Description: "Delete key"},
+			{Text: "save", Description: "Save database on disk"},
+			{Text: "exists", Description: "Return true if key exists  else return false"},
+			{Text: "type", Description: "Return true if key exists else return false"},
+			{Text: "@close", Description: "(CLI only command): Exit CLI sesion"},
+			{Text: "@clear", Description: "(CLI only command): Clear console"},
+			{Text: "@cls", Description: "(CLI only command): Clear console"},
 		}
 	} else {
 		suggestions = []prompt.Suggest{}
@@ -54,6 +57,7 @@ func (cli *Cli) Run() {
 			return
 		} else if text == "@clear" || text == "@cls" {
 			screen.Clear()
+			return
 		}
 		d := execute.Execute(text)
 		var g map[string]any
