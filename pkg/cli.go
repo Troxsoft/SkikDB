@@ -1,10 +1,13 @@
 package pkg
 
 import (
-	"bufio"
+	"encoding/json"
 	"fmt"
-	"os"
 	"strings"
+
+	"github.com/c-bata/go-prompt"
+	"github.com/fatih/color"
+	"github.com/inancgumus/screen"
 )
 
 type Cli struct {
@@ -20,19 +23,59 @@ func NewCLI(dbName string) (*Cli, error) {
 		Dbd: f,
 	}, nil
 }
+func (cli *Cli) autocompleter(d prompt.Document) []prompt.Suggest {
+	var suggestions []prompt.Suggest
+
+	if !strings.Contains(d.Text, " ") {
+		suggestions = []prompt.Suggest{
+			{Text: "get", Description: "get a key"},
+			{Text: "set", Description: "set a key"},
+			{Text: "delete", Description: "delete key"},
+			{Text: "save", Description: "save database on disk"},
+			{Text: "@close", Description: "close cli sesion"},
+		}
+	} else {
+		suggestions = []prompt.Suggest{}
+	}
+
+	return prompt.FilterHasPrefix(suggestions, d.GetWordBeforeCursor(), true)
+}
+
 func (cli *Cli) Run() {
+	done := make(chan bool)
 	execute := NewExecuter(cli.Dbd)
-	for {
 
-		reader := bufio.NewReader(os.Stdin)
-
-		fmt.Printf(">> ")
-		text, _ := reader.ReadString('\n')
+	prom := prompt.New(func(text string) {
 		text = strings.TrimSpace(text)
+
 		if text == "@close" {
-			break
+			done <- true
+			return
+		} else if text == "@clear" || text == "@cls" {
+			screen.Clear()
 		}
 		d := execute.Execute(text)
-		fmt.Println(d)
-	}
+		var g map[string]any
+		json.Unmarshal([]byte(d), &g)
+		if g["ok"] != true {
+			if e, e2 := g["errorInfo"]; e2 == true {
+				color.Red(e.(string))
+
+			} else {
+				color.Red("Error :/")
+			}
+		} else {
+
+			fmt.Printf("%v\n", g)
+		}
+	}, cli.autocompleter, prompt.OptionAddKeyBind(prompt.KeyBind{
+		Key: prompt.ControlC, Fn: func(b *prompt.Buffer) {
+			done <- true
+		}}))
+	go func() {
+		prom.Run()
+	}()
+
+	<-done
+	screen.Clear()
 }
