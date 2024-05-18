@@ -64,6 +64,24 @@ func (ex *Executer) Execute(code string) string {
 		return jsonToStr(map[string]any{
 			"ok": true,
 		})
+	} else if ex.isExists(lang) {
+		return jsonToStr(map[string]any{
+			"ok":     true,
+			"exists": ex.exists(lang),
+		})
+	} else if ex.isType(lang) {
+		f := ex.typee(lang)
+		if f == "Undefined" {
+			return jsonToStr(map[string]any{
+				"ok":        false,
+				"errorInfo": "key/value not exists",
+			})
+		} else {
+			return jsonToStr(map[string]any{
+				"ok":   true,
+				"type": f,
+			})
+		}
 	} else if ex.isSave(lang) {
 		e := ex.save(lang)
 		if e != nil {

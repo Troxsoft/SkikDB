@@ -8,6 +8,13 @@ func isIntNumber(num byte) bool {
 	}
 	return false
 }
+func jsonIdentToStr(js any) string {
+	d, err := json.MarshalIndent(js,"","	")
+	if err != nil {
+		panic(err)
+	}
+	return string(d)
+}
 func jsonToStr(js any) string {
 	d, err := json.Marshal(js)
 	if err != nil {

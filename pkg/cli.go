@@ -33,6 +33,7 @@ func (cli *Cli) autocompleter(d prompt.Document) []prompt.Suggest {
 			{Text: "delete", Description: "delete key"},
 			{Text: "save", Description: "save database on disk"},
 			{Text: "@close", Description: "close cli sesion"},
+			{Text: "exists", Description: "return true if key exists  else return false"},
 		}
 	} else {
 		suggestions = []prompt.Suggest{}
@@ -66,7 +67,7 @@ func (cli *Cli) Run() {
 			}
 		} else {
 
-			fmt.Printf("%v\n", g)
+			fmt.Printf("%v\n", jsonIdentToStr(g))
 		}
 	}, cli.autocompleter, prompt.OptionAddKeyBind(prompt.KeyBind{
 		Key: prompt.ControlC, Fn: func(b *prompt.Buffer) {
