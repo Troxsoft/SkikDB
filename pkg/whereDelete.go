@@ -86,7 +86,7 @@ func (executer *Executer) whereDelete(keyName string, value any, lang *SkikLang)
 		}
 	} // get * where value <=2
 	//fmt.Println(lang.Tokens[where].Value.(string))
-	d := executer.newExpLangGET(lang.Tokens[where].Value.(string), keyName, value)
+	d := executer.newExpLangDelete(lang.Tokens[where].Value.(string), keyName, value)
 	e, err := d.Evaluate(map[string]interface{}{
 		"key":   keyName,
 		"value": value,

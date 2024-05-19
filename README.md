@@ -38,19 +38,35 @@
     ```sql
     exists "INeedCash"
     ```
+- Others Examples:
+    ```sql
+    get * where value < 20
+    get 2 where startsWith(key,"+18")
+    set "names" ["pepe","nalga","ramirez","a","a2"]
+    list "names" addl "donald"
+    list "names" addr "frank"
+    list "names" delete 1 where index == 0
+    list "names" get 1 where index == 0
+    get "names"
+    list "names" delete *
+    get 1 where key == "mykey"
+    ```
 # Sixtax Error:
 ![sintax error](things/sintaxError.png)
-# Features 😫 `(Expected to be implemented in the future)`:
-- List `(add,delete,sort,is repeat,and more)`
-- Limit
-- Conditions `(likes sql)` 
-- Data handling `(strings,numbers)`
-- **DB Server**
-- JSON handling
-- Regex
-- Exact type
-- Update message error
-- Add native **API** in golang
-- Add **API** using DB server for others programing languages `(nodejs,c,c++,rust,python)`
+# Features:
+#### ✔ = 100%
+#### 😉 = 50%
+#### ❌ = 0%
+- List `(add,delete,sort,is repeat,and more)` (😉)
+- Limit (✔) 
+- Conditions (✔) 
+- Data handling `(strings,numbers)` (❌)
+- **DB Server** (❌)
+- JSON handling (❌)
+- Regex (❌)
+- Exact type (❌)
+- Update message error (❌)
+- Add native **API** for go (❌)
+- Add **API** using DB server`(go,nodejs,c,c++,rust,python)` (❌)
 #### This proyect use [c-bata/go-prompt](!https://github.com/c-bata/go-prompt) for autocomplete in the cli,[fatih/color](https://github.com/fatih/color) for terminal colors
 #### [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)

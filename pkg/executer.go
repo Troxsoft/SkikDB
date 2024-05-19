@@ -36,6 +36,34 @@ func (ex *Executer) Execute(code string) string {
 		ex.set(lang)
 		return jsonToStr(map[string]any{
 			"ok": true,
+		}) // set "lista" [1,2,3,4,5,6,7,8,9,10]
+		// list "lista" delete * where  value <=5
+		// list "lista" get *
+	} else if ex.isListGetWhere(lang) {
+		f90, f := ex.listGetWhere(lang)
+
+		if f != nil {
+			return jsonToStr(map[string]any{
+				"ok":        false,
+				"errorInfo": f.Error(),
+			})
+		}
+		return jsonToStr(map[string]any{
+			"ok":     true,
+			"values": *f90,
+		})
+	} else if ex.isListDeleteWhere(lang) {
+		f90, f := ex.listDeleteWhere(lang)
+
+		if f != nil {
+			return jsonToStr(map[string]any{
+				"ok":        false,
+				"errorInfo": f.Error(),
+			})
+		}
+		return jsonToStr(map[string]any{
+			"ok":         true,
+			"eliminates": *f90,
 		})
 	} else if ex.isDeleteWhere(lang) {
 		f := ex.deleteWhere(lang)
@@ -125,6 +153,17 @@ func (ex *Executer) Execute(code string) string {
 		})
 	} else if ex.isListAddr(lang) {
 		f := ex.listAddr(lang)
+		if f != nil {
+			return jsonToStr(map[string]any{
+				"ok":        false,
+				"errorInfo": f.Error(),
+			})
+		}
+		return jsonToStr(map[string]any{
+			"ok": true,
+		})
+	} else if ex.isListDeleteAll(lang) {
+		f := ex.listDeleteAll(lang)
 		if f != nil {
 			return jsonToStr(map[string]any{
 				"ok":        false,

@@ -29,6 +29,9 @@ func (cli *Cli) autocompleter(d prompt.Document) []prompt.Suggest {
 		suggestions = []prompt.Suggest{
 			{Text: "addl", Description: "Add a value to the left of the list"},
 			{Text: "addr", Description: "Add a value to the right of the list"},
+			{Text: "delete *", Description: "Delete all values from the list"},
+			{Text: "delete where", Description: "Delete a value from the list"},
+			{Text: "get", Description: "Get specific value from this list"},
 		}
 	} else {
 		if !strings.Contains(d.Text, " ") {
