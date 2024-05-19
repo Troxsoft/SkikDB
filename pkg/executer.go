@@ -37,6 +37,12 @@ func (ex *Executer) Execute(code string) string {
 		return jsonToStr(map[string]any{
 			"ok": true,
 		})
+	} else if ex.isDeleteWhere(lang) {
+		f := ex.deleteWhere(lang)
+		return jsonToStr(map[string]any{
+			"ok":         true,
+			"eliminates": f,
+		})
 	} else if ex.isGetWhere(lang) {
 		f := ex.getWhere(lang)
 		return jsonToStr(map[string]any{
@@ -60,6 +66,11 @@ func (ex *Executer) Execute(code string) string {
 		return jsonToStr(map[string]any{
 			"ok":     true,
 			"values": ex.getAll(lang),
+		}) // delete * where value != "aña"
+	} else if ex.isDeleteAll(lang) {
+		ex.deleteAll(lang)
+		return jsonToStr(map[string]any{
+			"ok": true,
 		})
 	} else if ex.isDelete(lang) {
 		err := ex.delete(lang)

@@ -47,7 +47,7 @@ import (
 
 //		return finalText
 //	}
-func (executer *Executer) newExpLangGET(exp string, key string, value any) *govaluate.EvaluableExpression {
+func (executer *Executer) newExpLangDelete(exp string, key string, value any) *govaluate.EvaluableExpression {
 	d, err := govaluate.NewEvaluableExpressionWithFunctions(exp, map[string]govaluate.ExpressionFunction{
 		"startsWith": func(arguments ...interface{}) (interface{}, error) {
 			if len(arguments) != 2 {
@@ -77,7 +77,7 @@ func (executer *Executer) newExpLangGET(exp string, key string, value any) *gova
 	}
 	return d
 }
-func (executer *Executer) whereGet(keyName string, value any, lang *SkikLang) bool {
+func (executer *Executer) whereDelete(keyName string, value any, lang *SkikLang) bool {
 
 	where := 0
 	for i, v := range lang.Tokens {
