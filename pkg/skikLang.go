@@ -1,6 +1,9 @@
 package pkg
 
-import "strings"
+import (
+	"errors"
+	"strings"
+)
 
 /*
 skik lang example:
@@ -16,6 +19,11 @@ type SkikLang struct {
 	Tokens     []Token
 	SourceCode string
 }
+
+var (
+	KEY_VALUE_NOT_FOUND = errors.New("key not found")
+	TYPE_INVALID        = errors.New("invalid type")
+)
 
 func (skl *SkikLang) PreInit() {
 	skl.SourceCode = strings.ReplaceAll(skl.SourceCode, "\r\n", "\n")

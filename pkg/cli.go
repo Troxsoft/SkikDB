@@ -25,21 +25,28 @@ func NewCLI(dbName string) (*Cli, error) {
 }
 func (cli *Cli) autocompleter(d prompt.Document) []prompt.Suggest {
 	var suggestions []prompt.Suggest
-
-	if !strings.Contains(d.Text, " ") {
+	if strings.HasPrefix(d.Text, "list") && strings.Count(d.Text, `"`) == 2 {
 		suggestions = []prompt.Suggest{
-			{Text: "get", Description: "Get a key"},
-			{Text: "set", Description: "Set a key"},
-			{Text: "delete", Description: "Delete key"},
-			{Text: "save", Description: "Save database on disk"},
-			{Text: "exists", Description: "Return true if key exists  else return false"},
-			{Text: "type", Description: "Return true if key exists else return false"},
-			{Text: "@close", Description: "(CLI only command): Exit CLI sesion"},
-			{Text: "@clear", Description: "(CLI only command): Clear console"},
-			{Text: "@cls", Description: "(CLI only command): Clear console"},
+			{Text: "addl", Description: "Add a value to the left of the list"},
+			{Text: "addr", Description: "Add a value to the right of the list"},
 		}
 	} else {
-		suggestions = []prompt.Suggest{}
+		if !strings.Contains(d.Text, " ") {
+			suggestions = []prompt.Suggest{
+				{Text: "get", Description: "Get a key"},
+				{Text: "set", Description: "Set a key"},
+				{Text: "list", Description: "List namespace"},
+				{Text: "delete", Description: "Delete key"},
+				{Text: "save", Description: "Save database on disk"},
+				{Text: "exists", Description: "Return true if key exists  else return false"},
+				{Text: "type", Description: "Return true if key exists else return false"},
+				{Text: "@close", Description: "(CLI only command): Exit CLI sesion"},
+				{Text: "@clear", Description: "(CLI only command): Clear console"},
+				{Text: "@cls", Description: "(CLI only command): Clear console"},
+			}
+		} else {
+			suggestions = []prompt.Suggest{}
+		}
 	}
 
 	return prompt.FilterHasPrefix(suggestions, d.GetWordBeforeCursor(), true)

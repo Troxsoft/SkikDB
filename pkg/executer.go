@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"errors"
+	//"fmt"
 )
 
 type Executer struct {
@@ -24,6 +25,7 @@ func (ex *Executer) Execute(code string) string {
 	lang.PreInit()
 	err := lang.Tokenize()
 	lang.Tokens = RemoveGarbageTokens(lang.Tokens)
+	//fmt.Printf("%s\n", jsonIdentToStr(lang.Tokens))
 	if err != nil {
 		return jsonToStr(map[string]any{
 			"ok":        false,
@@ -34,6 +36,12 @@ func (ex *Executer) Execute(code string) string {
 		ex.set(lang)
 		return jsonToStr(map[string]any{
 			"ok": true,
+		})
+	} else if ex.isGetWhere(lang) {
+		f := ex.getWhere(lang)
+		return jsonToStr(map[string]any{
+			"ok":     true,
+			"values": f,
 		})
 	} else if ex.isGet(lang) {
 		f := ex.get(lang)
@@ -88,6 +96,28 @@ func (ex *Executer) Execute(code string) string {
 			return jsonToStr(map[string]any{
 				"ok":        false,
 				"errorInfo": e.Error(),
+			})
+		}
+		return jsonToStr(map[string]any{
+			"ok": true,
+		})
+	} else if ex.isListAddl(lang) {
+		f := ex.listAddl(lang)
+		if f != nil {
+			return jsonToStr(map[string]any{
+				"ok":        false,
+				"errorInfo": f.Error(),
+			})
+		}
+		return jsonToStr(map[string]any{
+			"ok": true,
+		})
+	} else if ex.isListAddr(lang) {
+		f := ex.listAddr(lang)
+		if f != nil {
+			return jsonToStr(map[string]any{
+				"ok":        false,
+				"errorInfo": f.Error(),
 			})
 		}
 		return jsonToStr(map[string]any{

@@ -1,22 +1,25 @@
 package pkg
 
 const (
-	GET     = iota // get
-	SET            // set
-	DELETE         // delete
-	ALL            // *
-	ENDLINE        // \n
-	STRING         // "a text"
-	NUMBER         // 0,1,etc..
-	SPACE          //a espace
-	JSON           // {"json":true}
-	BOOLEAN        // true or false
-	LIST           // [2,3,4,5,6,7,8,"hola mundo",true]
+	GET    = iota // get
+	SET           // set
+	DELETE        // delete
+	WHERE
+	ALL     // *
+	ENDLINE // \n
+	STRING  // "a text"
+	NUMBER  // 0,1,etc..
+	SPACE   //a espace
+	JSON    // {"json":true}
+	BOOLEAN // true or false
+	LIST    // [2,3,4,5,6,7,8,"hola mundo",true]
 	SAVE
-	
+
 	LIST_SYMBOL // list
 	EXIST
 	TYPE
+	ADD_LEFT  // addl
+	ADD_RIGHT // addr
 )
 
 type Token struct {

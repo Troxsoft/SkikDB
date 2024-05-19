@@ -60,7 +60,8 @@ func (skl *SkikLang) Tokenize() error {
 			breck2 := 0
 			isCompleted := true
 			for isCompleted {
-				if skl.SourceCode[jsonEnd] == '"' {
+				if skl.SourceCode[jsonEnd] == '"' && skl.SourceCode[jsonEnd-1] != '\\' {
+
 					strs++
 				}
 				if skl.SourceCode[jsonEnd] == '{' && strs != 0 && strs%2 == 0 {
@@ -102,13 +103,13 @@ func (skl *SkikLang) Tokenize() error {
 			breck2 := 0
 			isCompleted := true
 			for isCompleted {
-				if skl.SourceCode[jsonEnd] == '"' {
+				if skl.SourceCode[jsonEnd] == '"' && skl.SourceCode[jsonEnd-1] != '\\' {
 					strs++
 				}
 				if skl.SourceCode[jsonEnd] == '[' && strs != 0 && strs%2 == 0 {
 					breck1++
 				}
-				if skl.SourceCode[jsonEnd] == ']'  && strs%2 == 0 {
+				if skl.SourceCode[jsonEnd] == ']' && strs%2 == 0 {
 					if breck2+1 == breck1 {
 						isCompleted = false
 						breck2++
@@ -142,6 +143,12 @@ func (skl *SkikLang) Tokenize() error {
 		} else if isValidSize(skl.SourceCode, index, 2) && skl.SourceCode[index] == 's' && skl.SourceCode[index+1] == 'e' && skl.SourceCode[index+2] == 't' {
 			skl.Tokens = append(skl.Tokens, *NewToken(SET, "set"))
 			index += 2
+		} else if isValidSize(skl.SourceCode, index, 3) && skl.SourceCode[index] == 'a' && skl.SourceCode[index+1] == 'd' && skl.SourceCode[index+2] == 'd' && skl.SourceCode[index+3] == 'l' {
+			skl.Tokens = append(skl.Tokens, *NewToken(ADD_LEFT, "addl"))
+			index += 3
+		} else if isValidSize(skl.SourceCode, index, 3) && skl.SourceCode[index] == 'a' && skl.SourceCode[index+1] == 'd' && skl.SourceCode[index+2] == 'd' && skl.SourceCode[index+3] == 'r' {
+			skl.Tokens = append(skl.Tokens, *NewToken(ADD_RIGHT, "addr"))
+			index += 3
 		} else if isValidSize(skl.SourceCode, index, 3) && skl.SourceCode[index] == 't' && skl.SourceCode[index+1] == 'r' && skl.SourceCode[index+2] == 'u' && skl.SourceCode[index+3] == 'e' {
 			skl.Tokens = append(skl.Tokens, *NewToken(BOOLEAN, true))
 			index += 3
@@ -154,6 +161,15 @@ func (skl *SkikLang) Tokenize() error {
 		} else if isValidSize(skl.SourceCode, index, 5) && skl.SourceCode[index] == 'e' && skl.SourceCode[index+1] == 'x' && skl.SourceCode[index+2] == 'i' && skl.SourceCode[index+3] == 's' && skl.SourceCode[index+4] == 't' && skl.SourceCode[index+5] == 's' {
 			skl.Tokens = append(skl.Tokens, *NewToken(EXIST, "exists"))
 			index += 5
+		} else if isValidSize(skl.SourceCode, index, 4) && skl.SourceCode[index] == 'w' && skl.SourceCode[index+1] == 'h' && skl.SourceCode[index+2] == 'e' && skl.SourceCode[index+3] == 'r' && skl.SourceCode[index+4] == 'e' {
+
+			skl.Tokens = append(skl.Tokens, *NewToken(WHERE, skl.SourceCode[index+5:]))
+			//get 1 where startsWith(key(),"+18")
+			//skl.Tokens = append(skl.Tokens, *NewToken(WHERE, "where"))
+			//index += 4
+			index = len(skl.SourceCode) - 1
+			break
+
 		} else if isValidSize(skl.SourceCode, index, 5) && skl.SourceCode[index] == 'd' && skl.SourceCode[index+1] == 'e' && skl.SourceCode[index+2] == 'l' && skl.SourceCode[index+3] == 'e' && skl.SourceCode[index+4] == 't' && skl.SourceCode[index+5] == 'e' {
 			skl.Tokens = append(skl.Tokens, *NewToken(DELETE, "delete"))
 			index += 5
