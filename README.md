@@ -1,4 +1,6 @@
 # Key/Value Memory Database 
+[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=Troxsoft&repo=SkikDB)](https://github.com/Troxsoft/SkikDBs)
+
 ## Characteristics
 - Easy 
 - Simple
