@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"encoding/json"
+	"net"
 	"os"
 )
 
@@ -14,6 +15,7 @@ type DBStorage struct {
 }
 type DB struct {
 	Storage DBStorage `json:"DB"`
+	Server  net.Listener
 }
 
 func NewDB(filepath string) (*DB, error) {

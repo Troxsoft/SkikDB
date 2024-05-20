@@ -30,6 +30,17 @@ func main() {
 				}
 			}
 
+		} else if len(os.Args)-1 == 4 && os.Args[1] == "server" {
+			e, err := pkg.NewDB(os.Args[2] + ".skl")
+			if err != nil {
+				fmt.Printf("%v\n", err)
+				return
+			}
+			err = e.StartServer(os.Args[3], os.Args[4])
+			if err != nil {
+				fmt.Printf("%v\n", err)
+				return
+			}
 		} else if len(os.Args)-1 == 2 && os.Args[1] == "cli" {
 
 			db, err := pkg.NewCLI(os.Args[2] + ".skl")
