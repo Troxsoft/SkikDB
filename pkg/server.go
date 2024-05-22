@@ -1,10 +1,11 @@
 package pkg
 
 import (
+	"bufio"
 	"fmt"
-	"io"
 	"net"
 	"strings"
+	"sync"
 )
 
 var (
@@ -23,51 +24,58 @@ func verifyPassword(str, password string) (string, bool) {
 	}
 	return "", false
 }
+
 func (db *DB) StartServer(address string, password string) error {
 	ser, err := net.Listen("tcp", address)
 
-	db.Server = ser
-	defer db.Server.Close()
 	if err != nil {
 		return err
 	}
+	var wg sync.WaitGroup
+	var mu sync.Mutex
 	ex := NewExecuter(db)
 	fmt.Printf(`
 Server listen on %s
 	`, address)
 	for {
-
-		conn, err := db.Server.Accept()
+		conn, err := ser.Accept()
 		if err != nil {
 			fmt.Printf("ERROR: %s\n", err.Error())
 			//conn.Close()
+			conn.Close()
 			continue
 		}
-
-		defer conn.Close()
+		goroutineLimit := make(chan struct{}, 10000) // Limitar a 100 goroutines simultáneas
 		// Handle the connection in a new goroutine
-		go func() {
-			msg_, err := io.ReadAll(conn)
+		go func(conn3 net.Conn) {
+			wg.Add(1)
+			goroutineLimit <- struct{}{} // Bloquear si hay 100 goroutines activas
+			msg_, err := bufio.NewReader(conn3).ReadString('\n')
+			defer wg.Done()
+			defer func() { <-goroutineLimit }() // Liberar una goroutine del límite
 			msg := string(msg_)
 			if err != nil {
-				fmt.Println("ERROR: ", err.Error())
-				conn.Close()
+				fmt.Println("ERROR: ", err.Error(), msg)
+
+				conn3.Close()
 				return
 			}
 
 			if query, pass := verifyPassword(msg, password); pass {
 				fmt.Printf("MSG: %s\n", query)
-
+				mu.Lock()
 				res := ex.Execute(query)
-
+				mu.Unlock()
 				// Enviar una respuesta al cliente
-				conn.Write([]byte(res))
+				conn3.Write([]byte(res))
 			} else {
 				fmt.Println("INVALID PASSWORD")
-				conn.Write([]byte("{\"ok\":false,\"errorInfo\":\"invalid password\"}"))
+				conn3.Write([]byte("{\"ok\":false,\"errorInfo\":\"invalid password\"}"))
 			}
 
-		}()
+			conn3.Close()
+		}(conn)
 	}
+	db.Server.Close()
 	return nil
 }
